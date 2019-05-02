@@ -3,6 +3,8 @@ import rebase from "re-base";
 import firebase from "firebase/app";
 import database from "firebase/database";
 import Stories from "./Stories";
+import "./App.css";
+import { Url } from "url";
 
 const HN_DATABASE_URL = "https://hacker-news.firebaseio.com";
 const HN_VERSION = "v0";
@@ -31,7 +33,8 @@ class App extends Component {
     this.state = {
       newStories: [],
       numberOfPosts: "",
-      initialSetOfStories: []
+      initialSetOfStories: [],
+      activePostIndex: 0
     };
   }
 
@@ -44,28 +47,40 @@ class App extends Component {
   handleChange = event => {
     if (event.target.value < 30) {
       this.setState({
-        numberOfPosts: event.target.value
+        numberOfPosts: event.target.value,
+        activePostIndex: event.target.value
       });
+      console.log("activePost", this.state.activePostIndex);
     } else {
       alert("You must supply a value less than 30");
     }
   };
+
   handleClick = () => {
     console.log("State number of posts", this.state.numberOfPosts);
-    const newStories = this.state.newStories[this.state.numberOfPosts];
+    const newStories = this.state.newStories[this.state.activePostIndex];
     this.setState({ newStories: [newStories] });
+    console.log(
+      "activePostIndex inside handleClick",
+      this.state.activePostIndex
+    );
   };
 
   handleNextClick = () => {
     console.log("Inside handleNextCLick", this.state.numberOfPosts);
     console.log("handleNextClick", this.state.newStories);
     console.log("initialSetOfStories", this.state.initialSetOfStories);
-    let index = this.state.numberOfPosts;
+    console.log("activePostIndex", this.state.activePostIndex);
+    let index = this.state.activePostIndex;
     const newStories = this.state.initialSetOfStories[++index];
     console.log("newStories in handleNextClick", newStories);
-    this.setState({ newStories: [newStories], numberOfPosts: index });
+    this.setState({
+      newStories: [newStories],
+      numberOfPosts: index,
+      activePostIndex: index
+    });
   };
-  
+
   handlePreviousClick = () => {
     console.log("Inside handlePreviousCLick", this.state.numberOfPosts);
     console.log("handlePreviousClick", this.state.newStories);
@@ -73,7 +88,11 @@ class App extends Component {
     let index = this.state.numberOfPosts;
     const newStories = this.state.initialSetOfStories[--index];
     console.log("newStories in handleNextClick", newStories);
-    this.setState({ newStories: [newStories], numberOfPosts: index });
+    this.setState({
+      newStories: [newStories],
+      numberOfPosts: index,
+      activePostIndex: index
+    });
   };
 
   componentDidMount() {
@@ -113,10 +132,15 @@ class App extends Component {
 
   render() {
     console.log("Render function", this.state.newStories);
+    const activePostIndex = this.state.activePostIndex;
+    const activePost = this.state.initialSetOfStories[activePostIndex];
+    //const url = activePost.url;
+    console.log("ACTIVE", activePost);
+    console.log(typeof activePost);
+    // console.log("active.url", url);
     return (
-      <div className="App">
-        {/* Data is being loaded */}
-        <React.Fragment>
+      <div>
+        {/*<React.Fragment>
           {this.state.newStories.map(data => (
             <li key={data.id}>
               <div>
@@ -126,7 +150,9 @@ class App extends Component {
               </div>
             </li>
           ))}
-        </React.Fragment>
+          </React.Fragment>*/}
+
+        <React.Fragment>{JSON.stringify(activePost)}</React.Fragment>
         <input
           type="number"
           name="numberOfPosts"
@@ -144,10 +170,10 @@ class App extends Component {
         </button>
 
         {/*<Stories
-            stories={JSON.stringify(this.state.newStories, null, 2)}
-            defaultInterval={1500}
-            width={432}
-            height={768}
+          stories={JSON.stringify(this.state.newStories, null, 2)}
+          defaultInterval={1500}
+          width={432}
+          height={768}
         />*/}
       </div>
     );
