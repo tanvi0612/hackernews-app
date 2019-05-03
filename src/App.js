@@ -151,9 +151,16 @@ class App extends Component {
             </li>
           ))}
           </React.Fragment>*/}
-
-        <React.Fragment>{JSON.stringify(activePost)}</React.Fragment>
-        <input
+        {activePost && (
+          <div className="note">
+            <a href={activePost.url}>
+              <strong>{activePost.title}</strong>
+            </a>
+            <br />
+            <span>{activePost.by}</span>
+          </div>
+        )}
+        {/*<input
           type="number"
           name="numberOfPosts"
           value={this.state.numberOfPosts}
@@ -161,20 +168,29 @@ class App extends Component {
         />
         <button type="submit" onClick={this.handleClick}>
           Submit
-        </button>
-        <button type="submit" onClick={this.handleNextClick}>
-          Next Story
-        </button>
-        <button type="submit" onClick={this.handlePreviousClick}>
-          Previous Story
-        </button>
-
-        {/*<Stories
+        </button>*/}
+        <div className="btn-div">
+          <button
+            className="btn round"
+            type="submit"
+            onClick={this.handlePreviousClick}
+          >
+            &#8249;
+          </button>
+          <button
+            className="btn round"
+            type="submit"
+            onClick={this.handleNextClick}
+          >
+            &#8250;
+          </button>
+          {/*<Stories
           stories={JSON.stringify(this.state.newStories, null, 2)}
           defaultInterval={1500}
           width={432}
           height={768}
         />*/}
+        </div>
       </div>
     );
   }
