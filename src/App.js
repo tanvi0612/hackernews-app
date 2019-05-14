@@ -110,7 +110,7 @@ class App extends Component {
   }
 
   fetchNewStories = async storyIds => {
-    let actions = storyIds.slice(0, 10).map(this.fetchSingleStory);
+    let actions = storyIds.slice(0, 30).map(this.fetchSingleStory);
     let results = await Promise.all(actions);
     console.log("results", results);
     //this.initialState(results);
@@ -156,6 +156,8 @@ class App extends Component {
     }
     return (
       <div className="background-gradient">
+        <div className="split left" onClick={this.handlePreviousClick} />
+        <div className="split right" onClick={this.handleNextClick} />
         {activePost && (
           <div className="note">
             <a href={activePost.url}>
