@@ -42,7 +42,7 @@ class App extends Component {
     const initialSetOfStories = firstFetch;
     console.log("Reached inside initialState", initialSetOfStories);
     this.setState({ initialSetOfStories: initialSetOfStories });
-  };*/
+  };
 
   handleChange = event => {
     if (event.target.value < 30) {
@@ -64,7 +64,7 @@ class App extends Component {
       "activePostIndex inside handleClick",
       this.state.activePostIndex
     );
-  };
+  };*/
 
   handleNextClick = () => {
     console.log("Inside handleNextCLick", this.state.numberOfPosts);
@@ -95,7 +95,7 @@ class App extends Component {
     });
   };
 
-  componentDidMount() {
+  fetchData = () => {
     Api.fetch(`/newstories`, {
       context: this,
       then(storyIds) {
@@ -103,10 +103,14 @@ class App extends Component {
         this.fetchNewStories(storyIds);
       }
     });
+  };
+
+  componentDidMount() {
+    this.fetchData();
   }
 
   fetchNewStories = async storyIds => {
-    let actions = storyIds.slice(0, 30).map(this.fetchSingleStory);
+    let actions = storyIds.slice(0, 10).map(this.fetchSingleStory);
     let results = await Promise.all(actions);
     console.log("results", results);
     //this.initialState(results);
@@ -132,25 +136,26 @@ class App extends Component {
 
   render() {
     console.log("Render function", this.state.newStories);
-    const activePostIndex = this.state.activePostIndex;
+    let activePostIndex = this.state.activePostIndex;
     const activePost = this.state.initialSetOfStories[activePostIndex];
-    //const url = activePost.url;
-    console.log("ACTIVE", activePost);
-    console.log(typeof activePost);
-    // console.log("active.url", url);
+    let previousButton;
+    if (activePostIndex === 0) {
+      previousButton = "";
+    } else {
+      previousButton = 1;
+    }
+    console.log("ACTIVE", activePostIndex);
+    if (activePostIndex === 9) {
+      console.log("Inside if at line 149");
+      let newActivePostIndex = ++activePostIndex;
+      this.setState({
+        activePostIndex: newActivePostIndex
+      });
+      console.log(this.state.activePostIndex);
+      this.fetchData();
+    }
     return (
-      <div>
-        {/*<React.Fragment>
-          {this.state.newStories.map(data => (
-            <li key={data.id}>
-              <div>
-                <a href={data.url}>{data.title}</a>
-                <br />
-                <span>{data.by}</span>
-              </div>
-            </li>
-          ))}
-          </React.Fragment>*/}
+      <div className="background-gradient">
         {activePost && (
           <div className="note">
             <a href={activePost.url}>
@@ -168,15 +173,17 @@ class App extends Component {
         />
         <button type="submit" onClick={this.handleClick}>
           Submit
-        </button>*/}
+        </button>
         <div className="btn-div">
-          <button
-            className="btn round"
-            type="submit"
-            onClick={this.handlePreviousClick}
-          >
-            &#8249;
-          </button>
+          {previousButton && (
+            <button
+              className="btn round"
+              type="submit"
+              onClick={this.handlePreviousClick}
+            >
+              &#8249;
+            </button>
+          )}
           <button
             className="btn round"
             type="submit"
@@ -189,8 +196,8 @@ class App extends Component {
           defaultInterval={1500}
           width={432}
           height={768}
-        />*/}
-        </div>
+        />
+          </div>*/}
       </div>
     );
   }
