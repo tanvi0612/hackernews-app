@@ -42,7 +42,6 @@ class App extends Component {
     activePostIndex = Math.min(Math.max(activePostIndex, 0), lastChildIndex);
 
     if (lastChildIndex - 5 === activePostIndex) {
-      // fetch more stories ---> Can we do this.fetchData() here ??
       this.fetchData();
     }
 
@@ -86,7 +85,6 @@ class App extends Component {
     console.log("results", results);
     this.setState({
       _stories: results
-      //initialSetOfStories: results
     });
   };
 
@@ -112,12 +110,16 @@ class App extends Component {
         <div className="split left" onClick={this.handlePreviousClick} />
         <div className="split right" onClick={this.handleNextClick} />
         {activePost && (
-          <div className="note">
-            <a href={activePost.url}>
-              <strong>{activePost.title}</strong>
-            </a>
-            <br />
-            <span>{activePost.by}</span>
+          <div>
+            <div className="note">
+              <a href={activePost.url}>
+                <strong>{activePost.title}</strong>
+              </a>
+
+              <br />
+              <hr />
+              <span>-{activePost.by}</span>
+            </div>
           </div>
         )}
       </div>
