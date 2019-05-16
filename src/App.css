@@ -107,7 +107,7 @@
 .split {
   height: 100%;
   position: fixed;
-  z-index: 0;
+  z-index: 1;
   top: 0;
   overflow-x: hidden;
 }
