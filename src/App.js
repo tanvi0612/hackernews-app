@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import rebase from "re-base";
 import firebase from "firebase/app";
 import database from "firebase/database";
-import Stories from "./Stories";
 import "./App.css";
-import { Url } from "url";
 
 const HN_DATABASE_URL = "https://hacker-news.firebaseio.com";
 const HN_VERSION = "v0";
@@ -31,71 +29,43 @@ class App extends Component {
     console.log("Inside app.js constructor function");
     super(props);
     this.state = {
-      newStories: [],
-      numberOfPosts: "",
-      initialSetOfStories: [],
+      _stories: [],
       activePostIndex: 0
     };
   }
 
-  /*initialState = firstFetch => {
-    const initialSetOfStories = firstFetch;
-    console.log("Reached inside initialState", initialSetOfStories);
-    this.setState({ initialSetOfStories: initialSetOfStories });
-  };
-
-  handleChange = event => {
-    if (event.target.value < 30) {
-      this.setState({
-        numberOfPosts: event.target.value,
-        activePostIndex: event.target.value
-      });
-      console.log("activePost", this.state.activePostIndex);
-    } else {
-      alert("You must supply a value less than 30");
-    }
-  };
-
-  handleClick = () => {
-    console.log("State number of posts", this.state.numberOfPosts);
-    const newStories = this.state.newStories[this.state.activePostIndex];
-    this.setState({ newStories: [newStories] });
-    console.log(
-      "activePostIndex inside handleClick",
-      this.state.activePostIndex
-    );
-  };*/
-
   handleNextClick = () => {
-    console.log("Inside handleNextCLick", this.state.numberOfPosts);
-    console.log("handleNextClick", this.state.newStories);
-    console.log("initialSetOfStories", this.state.initialSetOfStories);
-    console.log("activePostIndex", this.state.activePostIndex);
-    let index = this.state.activePostIndex;
-    const newStories = this.state.initialSetOfStories[++index];
-    console.log("newStories in handleNextClick", newStories);
+    const lastChildIndex = this.state._stories.length - 1;
+    let { activePostIndex } = this.state;
+    activePostIndex = activePostIndex + 1;
+
+    activePostIndex = Math.min(Math.max(activePostIndex, 0), lastChildIndex);
+
+    if (lastChildIndex - 5 === activePostIndex) {
+      // fetch more stories ---> Can we do this.fetchData() here ??
+      this.fetchData();
+    }
+
     this.setState({
-      newStories: [newStories],
-      numberOfPosts: index,
-      activePostIndex: index
+      activePostIndex
     });
   };
 
   handlePreviousClick = () => {
-    console.log("Inside handlePreviousCLick", this.state.numberOfPosts);
-    console.log("handlePreviousClick", this.state.newStories);
-    console.log("initialSetOfStories", this.state.initialSetOfStories);
-    let index = this.state.numberOfPosts;
-    const newStories = this.state.initialSetOfStories[--index];
-    console.log("newStories in handleNextClick", newStories);
+    let { activePostIndex } = this.state;
+    activePostIndex = activePostIndex - 1;
+    activePostIndex = Math.min(
+      Math.max(activePostIndex, 0),
+      this.state._stories.length - 1
+    );
+
     this.setState({
-      newStories: [newStories],
-      numberOfPosts: index,
-      activePostIndex: index
+      activePostIndex
     });
   };
 
   fetchData = () => {
+    console.log("fetch called");
     Api.fetch(`/newstories`, {
       context: this,
       then(storyIds) {
@@ -106,17 +76,17 @@ class App extends Component {
   };
 
   componentDidMount() {
+    console.log("componentDidMount called");
     this.fetchData();
   }
 
   fetchNewStories = async storyIds => {
-    let actions = storyIds.slice(0, 30).map(this.fetchSingleStory);
+    let actions = storyIds.map(this.fetchSingleStory);
     let results = await Promise.all(actions);
     console.log("results", results);
-    //this.initialState(results);
     this.setState({
-      newStories: results,
-      initialSetOfStories: results
+      _stories: results
+      //initialSetOfStories: results
     });
   };
 
@@ -135,25 +105,8 @@ class App extends Component {
   };
 
   render() {
-    console.log("Render function", this.state.newStories);
-    let activePostIndex = this.state.activePostIndex;
-    const activePost = this.state.initialSetOfStories[activePostIndex];
-    let previousButton;
-    if (activePostIndex === 0) {
-      previousButton = "";
-    } else {
-      previousButton = 1;
-    }
-    console.log("ACTIVE", activePostIndex);
-    if (activePostIndex === 9) {
-      console.log("Inside if at line 149");
-      let newActivePostIndex = ++activePostIndex;
-      this.setState({
-        activePostIndex: newActivePostIndex
-      });
-      console.log(this.state.activePostIndex);
-      this.fetchData();
-    }
+    console.log("this.activePostIndex", this.state.activePostIndex);
+    const activePost = this.state._stories[this.state.activePostIndex];
     return (
       <div className="background-gradient">
         <div className="split left" onClick={this.handlePreviousClick} />
@@ -167,39 +120,6 @@ class App extends Component {
             <span>{activePost.by}</span>
           </div>
         )}
-        {/*<input
-          type="number"
-          name="numberOfPosts"
-          value={this.state.numberOfPosts}
-          onChange={this.handleChange}
-        />
-        <button type="submit" onClick={this.handleClick}>
-          Submit
-        </button>
-        <div className="btn-div">
-          {previousButton && (
-            <button
-              className="btn round"
-              type="submit"
-              onClick={this.handlePreviousClick}
-            >
-              &#8249;
-            </button>
-          )}
-          <button
-            className="btn round"
-            type="submit"
-            onClick={this.handleNextClick}
-          >
-            &#8250;
-          </button>
-          {/*<Stories
-          stories={JSON.stringify(this.state.newStories, null, 2)}
-          defaultInterval={1500}
-          width={432}
-          height={768}
-        />
-          </div>*/}
       </div>
     );
   }
