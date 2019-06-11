@@ -80,6 +80,11 @@
   border-radius: 50%;
 }
 .background-gradient {
+  scroll-snap-type: mandatory;
+  scroll-snap-points-y: repeat(100vw);
+  scroll-snap-type: x mandatory;
+  display: flex;
+  overflow-x: scroll;
   background: #c31432; /* fallback for old browsers */
   background: -webkit-linear-gradient(
     to right,
@@ -107,7 +112,7 @@
 .split {
   height: 100%;
   position: fixed;
-  z-index: 1;
+  z-index: 3;
   top: 0;
   overflow-x: hidden;
 }
@@ -119,6 +124,63 @@
   width: 67%;
   right: 0;
 }
+/* strong,
+a {
+  text-shadow: 3px 4px 2px rgba(32, 34, 33, 0.1);
+  margin: 0 auto;
+  padding-bottom: 20px;
+  color: #c31432;
+  text-align: left;
+  width: 85%;
+  display: inline-block;
+  position: absolute;
+  left: 10%;
+  top: 40%;
+  /* transform: rotate(5deg) translate(-50%, -50%);
+}*/
+
+span {
+  text-shadow: 3px 4px 2px rgba(32, 34, 33, 0.1);
+  color: #240b36;
+  font-size: 20px;
+  position: absolute;
+  left: 65%;
+  top: 80%;
+  /*transform: rotate(10deg) translate(-80%, -10%);*/
+}
+
+hr {
+  text-shadow: 3px 4px 2px rgba(32, 34, 33, 0.1);
+  /* margin: 15px 0px; */
+  width: 30%;
+  position: absolute;
+  left: 36%;
+  top: 63%;
+  /*transform: rotate(10deg) translate(-80%, -10%);*/
+}
+
+.snap-container {
+  height: 100vh;
+  scroll-snap-type: x mandatory;
+  scroll-snap-type: mandatory;
+  scroll-snap-points-y: repeat(100vw);
+  display: flex;
+  overflow-x: scroll;
+}
+
+.snap-child {
+  background: #fff;
+  font-size: 25px;
+  font-family: "Quattrocento Sans", sans-serif;
+  width: 90%;
+  height: 50%;
+  position: absolute;
+  top: 25%;
+  left: 5%;
+  color: black;
+  scroll-snap-align: center;
+  scroll-padding: 50%;
+}
 strong,
 a {
   text-shadow: 3px 4px 2px rgba(32, 34, 33, 0.1);
@@ -129,31 +191,7 @@ a {
   width: 85%;
   display: inline-block;
   position: absolute;
-  left: 50%;
-  top: 55%;
-  transform: rotate(5deg) translate(-50%, -50%);
-  quotes: "“" "”" "‘" "’";
-}
-
-span {
-  text-shadow: 3px 4px 2px rgba(32, 34, 33, 0.1);
-  color: #240b36;
-  font-size: 20px;
-  position: absolute;
-  left: 75%;
-  top: 80%;
-  transform: rotate(10deg) translate(-80%, -10%);
-}
-
-hr {
-  text-shadow: 3px 4px 2px rgba(32, 34, 33, 0.1);
-  margin: 15px 0px;
-  width: 30%;
-  position: absolute;
-  left: 36%;
-  top: 63%;
-  transform: rotate(10deg) translate(-80%, -10%);
-}
-q {
-  quotes: "“" "";
+  left: 10%;
+  top: 20%;
+  /* transform: rotate(5deg) translate(-50%, -50%);*/
 }
