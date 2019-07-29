@@ -55,7 +55,7 @@ const App = () => {
   const [stories, setStories] = useState([]);
   const [activePostIndex, setActivePost] = useState(0);
   const [fetching, setFetching] = useState(false);
-  // const inputRef = useRef();
+  const inputRef = useRef();
 
   const onSwipeLeft = () => {
     console.log("I was swiped left.");
