@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect, useRef } from "react";
 import rebase from "re-base";
 import firebase from "firebase/app";
 //import axios from "axios";
@@ -51,16 +51,21 @@ const getStoryInfo = async storyId => {
     return base.fetch(`/${HN_VERSION}${endpoint}`, options);
   }
 };*/
-
-class App extends Component {
-  constructor() {
-    console.log("Inside app.js constructor function");
-    super();
-    this.state = {
-      _stories: [],
-      activePostIndex: 0
-    };
-  }
+const App = () => {
+  const [_stories, setStories] = useState([]);
+  const [activePostIndex] = useState(0);
+  const [fetching, setFetching] = useState(false);
+  const inputRef = useRef();
+};
+// class App extends Component {
+  // constructor() {
+  //   console.log("Inside app.js constructor function");
+  //   super();
+  //   this.state = {
+  //     _stories: [],
+  //     activePostIndex: 0
+  //   };
+  // }
 
   onSwipeLeft = () => {
     console.log("I was swiped left.");
@@ -130,10 +135,11 @@ class App extends Component {
     );*/
   //};
 
-  componentDidMount() {
+  // componentDidMount() {
+    useEffect( () =>{
     console.log("componentDidMount called");
-    this.fetchData();
-  }
+    this.fetchData();})
+    // }
 
   /*fetchNewStories = async storyIds => {
     let actions = storyIds.slice(0, 10).map(this.fetchSingleStory);
@@ -158,13 +164,13 @@ class App extends Component {
     });
   };*/
 
-  render() {
-    console.log("this.activePostIndex", this.state.activePostIndex);
-    const activePost = this.state._stories[this.state.activePostIndex];
-    const _stories = this.state._stories;
-    console.log("typeOf activePost", typeof activePost);
-    console.log("activePost", activePost);
-    console.log("_stories", _stories);
+  // render() {
+  //   console.log("this.activePostIndex", this.state.activePostIndex);
+  //   const activePost = this.state._stories[this.state.activePostIndex];
+  //   const _stories = this.state._stories;
+  //   console.log("typeOf activePost", typeof activePost);
+  //   console.log("activePost", activePost);
+  //   console.log("_stories", _stories);
     //metadata processing
     /*if (activePost) {
       console.log("url extracted", activePost.url);
@@ -173,6 +179,12 @@ class App extends Component {
       });
     }*/
     return (
+    console.log("this.activePostIndex", this.state.activePostIndex);
+  const activePost = this.state._stories[this.state.activePostIndex];
+  const _stories = this.state._stories;
+  console.log("typeOf activePost", typeof activePost);
+  console.log("activePost", activePost);
+  console.log("_stories", _stories);
       <div className="background-gradient">
         <div className="split left" onClick={this.onSwipeRight} />
         <div className="split right" onClick={this.onSwipeLeft} />
@@ -227,7 +239,7 @@ class App extends Component {
         )}*/}
       </div>
     );
-  }
-}
+  // }
+// }
 
 export default App;
